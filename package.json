@@ -1,0 +1,43 @@
+{
+  "name": "blue-sport",
+  "version": "0.0.1",
+  "description": "react",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --open --config webpack.config.js --env.NODE_ENV=local --env.dev --progress --watch",
+    "dev": "webpack --config webpack.config.js --env.NODE_ENV=local --env.dev --progress --watch",
+    "build": "webpack --env.NODE_ENV=local --env.prod",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "targeral",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^4.2.0",
+    "webpack": "^5.0.0-beta.14",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.6",
+    "lodash": "^4.17.15",
+    "react": "0.0.0-experimental-e5d06e34b",
+    "react-dom": "0.0.0-experimental-e5d06e34b"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react",
+      "@babel/preset-typescript"
+    ]
+  }
+}
