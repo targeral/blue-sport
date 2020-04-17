@@ -1,4 +1,4 @@
-import React, { Reducer, FunctionComponent, ClassicComponent,  } from 'react';
+import React, { Reducer, FunctionComponent, Component } from 'react';
 import { useReducer, useMemo, useEffect, useLayoutEffect } from 'react';
 import { Fallback } from './components/fallback';
 
@@ -8,7 +8,7 @@ export interface RouterProps {
     }
 }
 
-type RouterComponent = FunctionComponent<RouterProps> | ClassicComponent<RouterProps>;
+type RouterComponent = FunctionComponent<RouterProps> | Component<RouterProps>
 
 export interface Route {
     path: string;
@@ -68,12 +68,15 @@ const getHashUrl = (hash: string, fallback = '/'): string => {
 const getHashQuery = (hash: string, fallback = '/') => {
     const urlWithQuery = hash.split('#')[1] || fallback;
     const queryString = urlWithQuery.split('?')[1];
-    const queryObject = queryString.split('&').reduce((queryObject, kv) => {
-        const [key, value] = kv.split('=');
-        return {...queryObject, [key]: value};
-    }, {});
+    let queryObject = {};
+    if (queryString) {
+        queryObject = queryString.split('&').reduce((queryObject, kv) => {
+            const [key, value] = kv.split('=');
+            return { ...queryObject, [key]: value };
+        }, {});
+    }
     
-    return queryObject || {};
+    return queryObject;
 };
 
 const routeFallbackPage = (component: RouterComponent) => {
@@ -99,9 +102,13 @@ export const useRouter = (routes: Route[], fallback: RouterComponent = Fallback)
         return map;
     }, [routes]);
 
-    const AppWithRouter: RouterComponent = routesMap.has(state.currentHash)
-        ? routesMap.get(state.currentHash)
-        : routeFallbackPage(fallback);
+    let AppWithRouter;
+
+    if (routesMap.has(state.currentHash)) {
+        AppWithRouter = routesMap.get(state.currentHash);
+    } else {
+        AppWithRouter = routeFallbackPage(fallback);
+    }
 
     // 页面初始化根据url展示开始时候的页面
     useLayoutEffect(() => {
@@ -135,6 +142,5 @@ export const useRouter = (routes: Route[], fallback: RouterComponent = Fallback)
         });
     }, []);
 
-    return <AppWithRouter />;
+    return <AppWithRouter query={state.query} />;
 };
-
